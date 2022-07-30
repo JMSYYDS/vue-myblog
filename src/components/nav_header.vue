@@ -20,7 +20,12 @@
         </div>
         <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item>退出登录</el-dropdown-item> -->
-            <a href="#/home" @click="outlogin" class="aa">退出登录</a>
+            <div class="aa">
+                <a href="#/user">个人中心</a>
+            </div>
+            <div class="aa">
+                <a href="#/home" @click="outlogin">退出登录</a>
+            </div>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -70,12 +75,17 @@ export default {
         color: purple;
     }
     .aa{
+        margin-bottom: 10px;
+        font-size: 16px;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 10px;
+    }
+    .aa a{
         color: gray;
         text-decoration: none;
-        font-size: 16px;
-        margin: 20px;
     }
-    .aa:hover{
+    .aa a:hover{
         color: purple;
     }
     .box_in {

@@ -1,6 +1,7 @@
 <template>
   <div>
-      <h1>欢迎您:{{ $store.state.username }}</h1>
+    <br>
+    <h1>欢迎您:{{ $store.state.username }}</h1>
   </div>
 </template>
 
