@@ -3,10 +3,10 @@
         <div class="box_login">
             <p style="color: red;" v-show="error_tip">密码或用户名错误</p>
             <em>手机号：</em>
-            <input type="text" placeholder="手机号" v-model="mobile">
+            <input type="text" placeholder="手机号" v-model="mobile" readonly onfocus="this.removeAttribute('readonly');">
             <br>
             <em>密码：</em>
-            <input type="text" placeholder="密码" v-model="password">
+            <input type="password" placeholder="密码" v-model="password">
             <br>
             <button @click="login">登录</button>
             <button @click="remove">重置</button>
@@ -16,6 +16,7 @@
     </div>
 </template>
 <script>
+import {Login} from '@/api/user'
 export default {
     data(){
         return {
@@ -25,25 +26,36 @@ export default {
         }
     },
     methods: {
-        login() {
-            let parms = {
+        async login() {
+            let data = {
                 username: this.mobile,
                 password: this.password,
             }
-            this.$axios.post('api/login/', parms).then(response => {
-                if(response.data.state == 'OK'){
-                    localStorage.setItem('token', response.data.username)
-                    this.$store.commit('setus', true)
-                    this.error_tip = false
-                    this.$router.push('/home')
-                    this.$router.go(0)
-                }
-                else{
-                    this.error_tip = true
-                }
-            }).catch(error => {
-                console.log(error)
-            })
+            let login_data = await Login(data)
+            if(login_data.state == 'OK'){
+                localStorage.setItem('token', login_data.username)
+                this.$store.commit('setus', true)
+                this.error_tip = false
+                this.$router.push('/home')
+                this.$router.go(0)
+            }
+            else{
+                this.error_tip = true
+            }
+            // this.$axios.post('api/login/', parms).then(response => {
+            //     if(response.data.state == 'OK'){
+            //         localStorage.setItem('token', response.data.username)
+            //         this.$store.commit('setus', true)
+            //         this.error_tip = false
+            //         this.$router.push('/home')
+            //         this.$router.go(0)
+            //     }
+            //     else{
+            //         this.error_tip = true
+            //     }
+            // }).catch(error => {
+            //     console.log(error)
+            // })
         },
         remove() {
             this.mobile = ''
@@ -57,6 +69,7 @@ export default {
         height: 30px;
         width: 250px;
         margin-top: 15px;
+        padding-left: 10px;
         cursor: pointer;
         outline: none;
     }

@@ -56,7 +56,7 @@ export default {
   position: sticky;
   top: 0px;
   z-index:3;
-  }
+}
   
 
 </style>

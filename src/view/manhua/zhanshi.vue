@@ -22,6 +22,7 @@
                 v-for="(item,index) in passage_data"
                 :key="item.id"
                 @click="keep_car(index, item.passage)"
+                target="_blank"
                 >
                 {{ item.name }}
                 </a>
@@ -31,22 +32,33 @@
 </template>
 
 <script>
+import {ZhanshiCartoon} from '@/api/manhua'
 export default {
     props: ['id'],
-    created() {
-        
-        let parms = {
+    async created() {
+        let data = {
             id: this.id
         }
-        this.$axios.post('api/main_cartoon/', parms).then(response => {
-            this.img_data = response.data.img_data
-            this.p_data = response.data.p_data
-            this.passage_data = response.data.passage_data
-            this.$store.commit('setmanhua', response.data.passage_data)
+        let zhanshi_data = await ZhanshiCartoon(data)
+        if(zhanshi_data.state == 'OK'){
+            this.img_data = zhanshi_data.img_data
+            this.img_data = zhanshi_data.img_data
+            this.p_data = zhanshi_data.p_data
+            this.passage_data = zhanshi_data.passage_data
+            this.$store.commit('setmanhua', zhanshi_data.passage_data)
             if(localStorage.getItem(`passage${this.id}`) == null){
-                localStorage.setItem(`passage${this.id}`, response.data.passage_data[0].passage)
+                localStorage.setItem(`passage${this.id}`, zhanshi_data.passage_data[0].passage)
             }
-        })
+        }
+        // this.$axios.post('api/main_cartoon/', parms).then(response => {
+        //     this.img_data = response.data.img_data
+        //     this.p_data = response.data.p_data
+        //     this.passage_data = response.data.passage_data
+        //     this.$store.commit('setmanhua', response.data.passage_data)
+        //     if(localStorage.getItem(`passage${this.id}`) == null){
+        //         localStorage.setItem(`passage${this.id}`, response.data.passage_data[0].passage)
+        //     }
+        // })
     },
     data() {
         return {
@@ -154,6 +166,7 @@ export default {
         color: black;
     }
     .lis a:hover{
-        background-color: #409EFF;
+        color: white;
+        background-color: #E6A23C;
     }
 </style>

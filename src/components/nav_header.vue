@@ -12,11 +12,18 @@
             <a href="#/register" v-if="!$store.state.user">注册</a>
             <a href="#/login" v-if="$store.state.user">切换账号</a>
             <a href="#/login" v-else>登录</a>
-            <a href="#/home" @click="outlogin">退出登录</a>
         </div>
       </div>
-      <h3 v-show="$store.state.user">欢迎您：{{ $store.state.username }}</h3>
-  </div>
+      <el-dropdown class="user_show" v-if="$store.state.user">
+        <div>
+            <h3>欢迎您：{{ $store.state.username }} <i class="el-icon-arrow-down"></i></h3>
+        </div>
+        <el-dropdown-menu slot="dropdown">
+            <!-- <el-dropdown-item>退出登录</el-dropdown-item> -->
+            <a href="#/home" @click="outlogin" class="aa">退出登录</a>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
 </template>
 
 <script>
@@ -51,10 +58,24 @@ export default {
         width: 100%;
         height: 90px;
         background-color: white;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     }
-    .box_top h3 {
-        position: absolute;
-        right: 50px;
+    .user_show{
+        float: right;
+        cursor: pointer;
+        left: 100px;
+    }
+    .user_show h3 {
+        font-size: 19px;
+        color: purple;
+    }
+    .aa{
+        color: gray;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 20px;
+    }
+    .aa:hover{
         color: purple;
     }
     .box_in {

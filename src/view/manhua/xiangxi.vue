@@ -25,44 +25,62 @@
 </template>
 
 <script>
+import {GetImgs, ZhanshiCartoon} from '@/api/manhua'
 export default {
     props: ['idx', 'passage'],
-    created() {
+    async created() {
         // 检查浏览历史
         if(localStorage.getItem(`passage${this.idx}`)){
-            let parms = {
+            let data = {
                 idx: this.idx,
                 passage: localStorage.getItem(`passage${this.idx}`)
             }
-            this.$axios.post('api/get_imgs/', parms).then(response => {
-                this.img_data = response.data.img_data
-                this.title = response.data.title
-            })
+            let Imgs = await GetImgs(data)
+            if(Imgs.state == 'OK'){
+                this.img_data = Imgs.img_data
+                this.title = Imgs.title
+            }
+            // this.$axios.post('api/get_imgs/', parms).then(response => {
+            //     this.img_data = response.data.img_data
+            //     this.title = response.data.title
+            // })
         }
         else{
-            let parms = {
+            let data = {
                 idx: this.idx,
                 passage: this.passage
             }
-            this.$axios.post('api/get_imgs/', parms).then(response => {
-                this.img_data = response.data.img_data
-                this.title = response.data.title
-            })
+            let Imgs = await GetImgs(data)
+            if(Imgs.state == 'OK'){
+                this.img_data = Imgs.img_data
+                this.title = Imgs.title
+            }
+            // this.$axios.post('api/get_imgs/', data).then(response => {
+            //     this.img_data = response.data.img_data
+            //     this.title = response.data.title
+            // })
         }
         
         // 防止页面刷新时丢失数据
         let parms2 = {
             id: this.idx
         }
+        let zhanshi_data = await ZhanshiCartoon(parms2)
         if(sessionStorage.getItem('temp')){
-            this.$axios.post('api/main_cartoon/', parms2).then(response => {
-                this.$store.commit('setmanhua', response.data.passage_data.reverse())
-            })
+            if(zhanshi_data.state == 'OK'){
+                this.$store.commit('setmanhua', zhanshi_data.passage_data.reverse())
+            }
+            // this.$axios.post('api/main_cartoon/', parms2).then(response => {
+            //     this.$store.commit('setmanhua', response.data.passage_data.reverse())
+            // })
         }
         else{
-            this.$axios.post('api/main_cartoon/', parms2).then(response => {
-                this.$store.commit('setmanhua', response.data.passage_data)
-            })
+            if(zhanshi_data.state == 'OK'){
+                this.$store.commit('setmanhua', zhanshi_data.passage_data)
+            }
+            // this.$axios.post('api/main_cartoon/', parms2).then(response => {
+            //     this.$store.commit('setmanhua', response.data.passage_data)
+            // })
         }
     },
     data() {
@@ -80,23 +98,31 @@ export default {
             // this.count += 2
         },
         // 上一章
-        back_car() {
+        async back_car() {
             let index = this.$store.state.index
             let manhua = this.$store.state.manhua
             // 判断倒序还是正序
             if(this.$store.state.temp == false){
                 if(index != manhua.length - 1){
-                    let parms = {
+                    let data = {
                         idx: manhua[index+1].idx,
                         passage: manhua[index+1].passage
                     }
-                this.$axios.post('api/get_imgs/', parms).then(response => {
-                    this.img_data = response.data.img_data
-                    this.$store.commit('setindex', index + 1)
-                    localStorage.setItem('index', index + 1)
-                    localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
-                    window.scrollTo(0,0);
-                    })
+                    let Imgs = await GetImgs(data)
+                    if(Imgs.state == 'OK'){
+                        this.img_data = Imgs.img_data
+                        this.$store.commit('setindex', index + 1)
+                        localStorage.setItem('index', index + 1)
+                        localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
+                        window.scrollTo(0,0);
+                    }
+                    // this.$axios.post('api/get_imgs/', parms).then(response => {
+                    //     this.img_data = response.data.img_data
+                    //     this.$store.commit('setindex', index + 1)
+                    //     localStorage.setItem('index', index + 1)
+                    //     localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
+                    //     window.scrollTo(0,0);
+                    // })
                 }
                 else{
                     alert("这是第一章")
@@ -104,17 +130,25 @@ export default {
             }
             else{
                 if(index != 0){
-                    let parms = {
+                    let data = {
                         idx: manhua[index-1].idx,
                         passage: manhua[index-1].passage
                     }
-                this.$axios.post('api/get_imgs/', parms).then(response => {
-                    this.img_data = response.data.img_data
-                    this.$store.commit('setindex', index - 1)
-                    localStorage.setItem('index', index - 1)
-                    localStorage.setItem(`passage${this.idx}`, manhua[index-1].passage)
-                    window.scrollTo(0,0);
-                    })
+                    let Imgs = await GetImgs(data)
+                    if(Imgs.state == 'OK'){
+                        this.img_data = Imgs.img_data
+                        this.$store.commit('setindex', index - 1)
+                        localStorage.setItem('index', index - 1)
+                        localStorage.setItem(`passage${this.idx}`, manhua[index-1].passage)
+                        window.scrollTo(0,0);
+                    }
+                    // this.$axios.post('api/get_imgs/', parms).then(response => {
+                    //     this.img_data = response.data.img_data
+                    //     this.$store.commit('setindex', index - 1)
+                    //     localStorage.setItem('index', index - 1)
+                    //     localStorage.setItem(`passage${this.idx}`, manhua[index-1].passage)
+                    //     window.scrollTo(0,0);
+                    // })
                 }
                 else{
                     alert("这是第一章")
@@ -123,58 +157,81 @@ export default {
             
         },
         // 下一章
-        next_car() {
+        async next_car() {
             let index = this.$store.state.index
             let manhua = this.$store.state.manhua
             // 判断倒序还是正序
             if(this.$store.state.temp == false){
                 if(index != 0){
-                    let parms = {
+                    let data = {
                         idx: manhua[index-1].idx,
                         passage: manhua[index-1].passage
                     }
-                    this.$axios.post('api/get_imgs/', parms).then(response => {
-                        this.img_data = response.data.img_data
+                    let Imgs = await GetImgs(data)
+                    if(Imgs.state == 'OK'){
+                        this.img_data = Imgs.img_data
                         this.$store.commit('setindex', index - 1)
                         localStorage.setItem('index', index - 1)
                         localStorage.setItem(`passage${this.idx}`, manhua[index-1].passage)
                         window.scrollTo(0,0);
-                        })
                     }
+                    // this.$axios.post('api/get_imgs/', parms).then(response => {
+                    //     this.img_data = response.data.img_data
+                    //     this.$store.commit('setindex', index - 1)
+                    //     localStorage.setItem('index', index - 1)
+                    //     localStorage.setItem(`passage${this.idx}`, manhua[index-1].passage)
+                    //     window.scrollTo(0,0);
+                    // })
+                }
                 else{
                     alert("这是最后一章")
                 }
             }
             else{
                 if(index != manhua.length - 1){
-                    let parms = {
+                    let data = {
                         idx: manhua[index+1].idx,
                         passage: manhua[index+1].passage
                     }
-                this.$axios.post('api/get_imgs/', parms).then(response => {
-                    this.img_data = response.data.img_data
-                    this.$store.commit('setindex', index + 1)
-                    localStorage.setItem('index', index + 1)
-                    localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
-                    window.scrollTo(0,0);
-                    })
+                    let Imgs = await GetImgs(data)
+                    if(Imgs.state == 'OK'){
+                        this.img_data = Imgs.img_data
+                        this.$store.commit('setindex', index + 1)
+                        localStorage.setItem('index', index + 1)
+                        localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
+                        window.scrollTo(0,0);
+                    }
+                    // this.$axios.post('api/get_imgs/', parms).then(response => {
+                    //     this.img_data = response.data.img_data
+                    //     this.$store.commit('setindex', index + 1)
+                    //     localStorage.setItem('index', index + 1)
+                    //     localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
+                    //     window.scrollTo(0,0);
+                    // })
                 }
                 else{
                     alert("这是最后一章")
                 }
             }
         },
-        choos(passage, index) {
-            let parms = {
+        async choos(passage, index) {
+            let data = {
                 idx: this.idx,
                 passage: passage
             }
-            this.$axios.post('api/get_imgs/', parms).then(response => {
-                this.img_data = response.data.img_data
+            let Imgs = await GetImgs(data)
+            if(Imgs.state == 'OK'){
+                this.img_data = Imgs.img_data
                 this.$store.commit('setindex', index)
                 localStorage.setItem('index', index)
                 localStorage.setItem(`passage${this.idx}`, passage)
-            })
+            }
+            // this.$axios.post('api/get_imgs/', parms).then(response => {
+            //     this.img_data = response.data.img_data
+            //     this.$store.commit('setindex', index)
+            //     localStorage.setItem('index', index)
+            //     localStorage.setItem(`passage${this.idx}`, passage)
+            // })
         }
     },
 }

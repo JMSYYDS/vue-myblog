@@ -15,11 +15,11 @@
     <el-input v-model="ser_data" placeholder="请输入内容" class="ser_in"></el-input>
   </div>
   <div class="box_body">
-      <div class="lis" v-for="item in arr.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="item.id">
-          <a :href="'#/cartoon/book/'+item.id">
+      <div class="lis" v-for="item in feiye" :key="item.id">
+          <a :href="'#/cartoon/book/'+item.id" target="_blank">
             <img :src="item.image">
           </a>
-          <a :href="'#/cartoon/book/'+item.id" class="cartoon_name">{{ item.title }}</a>
+          <a :href="'#/cartoon/book/'+item.id" class="cartoon_name" target="_blank">{{ item.title }}</a>
           <p style="font-size: 13px">{{ item.describe }}</p>
       </div>
   </div>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import {AllCartoon, TypeCartoon} from '@/api/manhua'
 export default {
     data() {
         return {
@@ -53,18 +54,23 @@ export default {
             ser_data: ''
         }
     },
+    computed: {
+        feiye() {
+            return this.arr.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize)
+        }
+    },
     methods: {
-        get_res() {
-            this.$axios.get('api/main_cartoon/').then(response => {
-                if(response.data.state == 'OK'){
-                    this.arr = response.data.arr
-                    this.all_arr = response.data.arr
-                }
-            })
-            this.$axios.get('api/get_type/').then(response => {
-                this.lianzai_arr = response.data.lianzai_arr
-                this.wanjie_arr = response.data.wanjie_arr
-            })
+        async get_res() {
+            let all_data = await AllCartoon()
+            if(all_data.state == 'OK'){
+                this.arr = all_data.arr
+                this.all_arr = all_data.arr
+            }
+            let type_data = await TypeCartoon()
+            if(type_data.state == 'OK'){
+                this.lianzai_arr = type_data.lianzai_arr
+                this.wanjie_arr = type_data.wanjie_arr
+            }
         },
 
         handleCurrentChange(val) {
