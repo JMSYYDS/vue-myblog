@@ -16,12 +16,22 @@
       </div>
       <el-dropdown class="user_show" v-if="$store.state.user">
         <div>
-            <h3>欢迎您：{{ $store.state.username }} <i class="el-icon-arrow-down"></i></h3>
+            <el-col :span="12">
+            <div class="demo-basic--circle">
+                <div class="block">
+                    <el-avatar :size="40" :src="imageUrl"></el-avatar>
+                </div>
+            </div>
+            </el-col>
+            <i class="el-icon-arrow-down"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item>退出登录</el-dropdown-item> -->
             <div class="aa">
                 <a href="#/user">个人中心</a>
+            </div>
+            <div class="aa">
+                <a href="javascript:">编辑信息</a>
             </div>
             <div class="aa">
                 <a href="#/home" @click="outlogin">退出登录</a>
@@ -32,21 +42,35 @@
 </template>
 
 <script>
+import {LoginOut, GetHeadImg} from '@/api/user'
 export default {
     data() {
         return {
+            imageUrl: ''
         }
     },
     methods: {
-        outlogin () {
-            localStorage.removeItem('token')
-            this.$store.commit('setus', false)
-            this.$router.go(0)
+        async outlogin () {
+            let data = await LoginOut()
+            if(data.state == 'OK'){
+                localStorage.removeItem('token')
+                this.$store.commit('setus', false)
+                this.$router.go(0)
+            }
         },
     },
-    mounted() {
+    async mounted() {
         if(localStorage.getItem('token')){
             this.$store.commit('setus', true)
+            let data = await GetHeadImg({
+                username: localStorage.getItem('token')
+            })
+            if(data.state == 'OK'){
+                this.imageUrl = data.img_data
+            }else{
+                console.log("hh")
+                this.imageUrl = 'https://img2.baidu.com/it/u=3035872156,255770104&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500'
+            }
         }
         else{
             this.$store.commit('setus', false)
@@ -68,7 +92,13 @@ export default {
     .user_show{
         float: right;
         cursor: pointer;
-        left: 100px;
+        left: 180px;
+    }
+    .el-icon-arrow-down{
+        position: relative;
+        font-size: 20px;
+        left: 10px;
+        top: 10px;
     }
     .user_show h3 {
         font-size: 19px;
