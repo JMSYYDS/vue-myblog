@@ -15,9 +15,6 @@ module.exports = defineConfig({
             }
         },
     },
-    client: {
-        webSocketURL: 'ws://192.168.1.6:8008/ws',
-    },
     allowedHosts: [
         'jmsblog.nat123.net', // 允许访问的域名地址，即花生壳内网穿透的地址
         '49023y65u0.qicp.vip'
