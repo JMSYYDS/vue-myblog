@@ -1,14 +1,21 @@
 <template>
   <div>
-      <div>
-        <button class="title_bt" @click="titl_show">章<br>节</button>
-        <p class="title_top">共{{ title.length }}章</p>
-        <div class="zhangjie">
-            <div v-for="(i, index) in $store.state.manhua" :key="i.id">
-                <a :href="'#/cartoon/detail/'+idx+'/'+i.passage" @click="choos(i.passage, index)">{{ i.name }}</a>
-            </div>
+      <el-button @click="drawer = true" type="primary" class="drawer_btn">
+        章节目录
+      </el-button>
+
+      <el-drawer
+        :title="'目录(共'+title.length+'章)'"
+        :visible.sync="drawer"
+        direction="ltr"
+        size="25%"
+        :before-close="handleClose">
+        <div v-for="(i, index) in $store.state.manhua" :key="i.id" class="drawer_list">
+            <a :href="'#/cartoon/detail/'+idx+'/'+i.passage" @click="choos(i.passage, index)">{{ i.name }}</a>
         </div>
-      </div>
+      </el-drawer>
+
+      <div class="manhua_mess"><span style="margin-top: 30px;display:block">{{manhua_mess}}</span></div>
       
       <div class="btn">
         <el-button @click="back_car">上一章</el-button>
@@ -28,6 +35,15 @@
 import {GetImgs, ZhanshiCartoon} from '@/api/manhua'
 export default {
     props: ['idx', 'passage'],
+    data() {
+        return {
+            title: [],
+            img_data: [],
+            manhua_mess: '',
+            count: 30,
+            drawer: false
+        }
+    },
     async created() {
         // 检查浏览历史
         if(localStorage.getItem(`passage${this.idx}`)){
@@ -39,6 +55,7 @@ export default {
             if(Imgs.state == 'OK'){
                 this.img_data = Imgs.img_data
                 this.title = Imgs.title
+                this.manhua_mess = Imgs.manhua_mess
             }
             // this.$axios.post('api/get_imgs/', parms).then(response => {
             //     this.img_data = response.data.img_data
@@ -54,6 +71,7 @@ export default {
             if(Imgs.state == 'OK'){
                 this.img_data = Imgs.img_data
                 this.title = Imgs.title
+                this.manhua_mess = Imgs.manhua_mess
             }
             // this.$axios.post('api/get_imgs/', data).then(response => {
             //     this.img_data = response.data.img_data
@@ -82,15 +100,12 @@ export default {
             //     this.$store.commit('setmanhua', response.data.passage_data)
             // })
         }
-    },
-    data() {
-        return {
-            title: [],
-            img_data: [],
-            count: 30
-        }
+        // this.$store.commit('setmanhua', zhanshi_data.passage_data)
     },
     methods: {
+        handleClose() {
+            this.drawer = false
+        },
         titl_show() {
             console.log(this)
         },
@@ -102,7 +117,7 @@ export default {
             let index = this.$store.state.index
             let manhua = this.$store.state.manhua
             // 判断倒序还是正序
-            if(this.$store.state.temp == false){
+            if(this.$store.state.temp === false){
                 if(index != manhua.length - 1){
                     let data = {
                         idx: manhua[index+1].idx,
@@ -111,6 +126,7 @@ export default {
                     let Imgs = await GetImgs(data)
                     if(Imgs.state == 'OK'){
                         this.img_data = Imgs.img_data
+                        this.manhua_mess = Imgs.manhua_mess
                         this.$store.commit('setindex', index + 1)
                         localStorage.setItem('index', index + 1)
                         localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
@@ -137,6 +153,7 @@ export default {
                     let Imgs = await GetImgs(data)
                     if(Imgs.state == 'OK'){
                         this.img_data = Imgs.img_data
+                        this.manhua_mess = Imgs.manhua_mess
                         this.$store.commit('setindex', index - 1)
                         localStorage.setItem('index', index - 1)
                         localStorage.setItem(`passage${this.idx}`, manhua[index-1].passage)
@@ -161,7 +178,7 @@ export default {
             let index = this.$store.state.index
             let manhua = this.$store.state.manhua
             // 判断倒序还是正序
-            if(this.$store.state.temp == false){
+            if(this.$store.state.temp === false){
                 if(index != 0){
                     let data = {
                         idx: manhua[index-1].idx,
@@ -170,6 +187,7 @@ export default {
                     let Imgs = await GetImgs(data)
                     if(Imgs.state == 'OK'){
                         this.img_data = Imgs.img_data
+                        this.manhua_mess = Imgs.manhua_mess
                         this.$store.commit('setindex', index - 1)
                         localStorage.setItem('index', index - 1)
                         localStorage.setItem(`passage${this.idx}`, manhua[index-1].passage)
@@ -196,6 +214,7 @@ export default {
                     let Imgs = await GetImgs(data)
                     if(Imgs.state == 'OK'){
                         this.img_data = Imgs.img_data
+                        this.manhua_mess = Imgs.manhua_mess
                         this.$store.commit('setindex', index + 1)
                         localStorage.setItem('index', index + 1)
                         localStorage.setItem(`passage${this.idx}`, manhua[index+1].passage)
@@ -222,6 +241,7 @@ export default {
             let Imgs = await GetImgs(data)
             if(Imgs.state == 'OK'){
                 this.img_data = Imgs.img_data
+                this.manhua_mess = Imgs.manhua_mess
                 this.$store.commit('setindex', index)
                 localStorage.setItem('index', index)
                 localStorage.setItem(`passage${this.idx}`, passage)
@@ -232,12 +252,24 @@ export default {
             //     localStorage.setItem('index', index)
             //     localStorage.setItem(`passage${this.idx}`, passage)
             // })
+            this.drawer = false
         }
     },
 }
 </script>
 
 <style scoped>
+    .manhua_mess{
+        position: fixed;
+        top: 0;
+        text-align: center;
+        width: 100%;
+        height: 90px;
+        font-size: 20px;
+        z-index: 999;
+        color: white;
+        background-color: black;
+    }
     .imgs{
         margin-left: auto;
         margin-right: auto;
@@ -248,77 +280,27 @@ export default {
         margin-top: 30px;
         margin-bottom: 20px;
     }
-    /* @keyframes title_show{
-        from{
-            transform: translateX(0px);
-        }
-        to{
-            transform: translateX(-250px);
-        }
-    } */
-    .zhangjie{
-        overflow-y: auto;
-        position: fixed;
-        left: 0;
-        top: 170px;
-        width: 250px;
-        height: 350px;
-        background-color: #303133;
-        animation: title_show 1s;
+    .drawer_list{
+        margin-top: 10px;
     }
-    .zhangjie a{
+    .drawer_list a{
         display: block;
-        margin-right: auto;
-        margin-left: auto;
+        /* margin-right: auto;
+        margin-left: auto; */
+        padding-top: 5px;
         height: 30px;
-        background-color: #303133;
         text-decoration: none;
-        color: #b0b0b0;
+        /* color: #b0b0b0; */
+        color: black;
     }
-    .zhangjie a:hover{
-        background-color: #606266;
-    }
-    .zhangjie div{
-        height: 30px;
-        margin: 10px;
-    }
-    .title_top{
-        position: fixed;
-        top: 140px;
-        width: 250px;
-        height: 30px;
-        text-align: center;
-        background-color: #181819;
+    .drawer_list a:hover{
+        background-color: purple;
         color: white;
     }
-    
-    .zhangjie::-webkit-scrollbar {/*滚动条整体样式*/
-        width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
-        height: 5px;
-        scrollbar-arrow-color: red;
-    }
-    .zhangjie::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
-        border-radius: 5px;
-        -webkit-box-shadow: inset 0 0 5px rgb(0, 0, 0);
-        background: rgb(247, 246, 246);
-        scrollbar-arrow-color: red;
-    }
-
-    .zhangjie::-webkit-scrollbar-track { /*滚动条里面轨道*/
-        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-        border-radius: 0;
-        background: rgba(0,0,0,0);
-    }
-    .title_bt{
+    .drawer_btn{
         position: fixed;
-        left: 250px;
-        top: 280px;
-        text-align: center;
-        color: white;
-        width: 40px;
-        height: 68px;
-        background-color: #303133;
-        cursor: pointer;
+        left: 0px;
+        top: 50%;
     }
     
 </style>

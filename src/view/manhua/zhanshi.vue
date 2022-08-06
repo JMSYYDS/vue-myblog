@@ -9,7 +9,7 @@
                     <p><span>状态：{{ p_data.state }}</span><span>{{ p_data.update_time }}</span></p>
                     <p style="font-size: 14px; margin-top:15px;">{{ p_data.jianjie }}</p>
                     <div style="text-align: left;margin-top: 20px">
-                        <a :href="'#/cartoon/detail/'+id+'/'+history">
+                        <a :href="'#/cartoon/detail/'+id+'/'+history" target="_blank">
                             <el-button type="success" style="width: 200px">继续阅读</el-button>
                         </a>
                     </div>
@@ -63,12 +63,17 @@ export default {
     data() {
         return {
             // 历史记录
-            history: localStorage.getItem(`passage${this.id}`),
             sort: '倒序',
             img_data: '',
             p_data: {},
-            passage_data: []
+            passage_data: [],
+            ind: 0
         }
+    },
+    computed: {
+        history() {
+            return localStorage.getItem(`passage${this.id}`)?localStorage.getItem(`passage${this.id}`):this.passage_data[this.passage_data.length-1].passage
+        },
     },
     methods: {
         resver() {
@@ -84,8 +89,13 @@ export default {
             this.$store.commit('setmanhua', this.passage_data)
         },
         keep_car(index, passage) {
-            this.$store.commit('setindex', index)
-            localStorage.setItem('index', index)
+            if(this.$store.state.temp === false) {
+                this.ind = index
+            }else(
+                this.ind = this.passage_data.length - (index + 1)
+            )
+            this.$store.commit('setindex', this.ind)
+            localStorage.setItem('index', this.ind)
             localStorage.setItem(`passage${this.id}`, passage)
         }
     },
@@ -167,6 +177,6 @@ export default {
     }
     .lis a:hover{
         color: white;
-        background-color: #E6A23C;
+        background-color: purple;
     }
 </style>

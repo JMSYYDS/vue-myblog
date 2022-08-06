@@ -2,7 +2,10 @@
   <div class="box_top">
       <div class="box_in">
         <div class="box_left">
-            <a href="#/home">主页</a>
+            <a href="#/home" style="">
+                <img src="../assets/logo.png" style="width:40px;height: 40px">
+                <span class="zhuye">主页</span>
+            </a>
         </div>
         <div class="box_right">
             <a href="#/person">个人简历</a>
@@ -27,13 +30,13 @@
         </div>
         <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item>退出登录</el-dropdown-item> -->
-            <div class="aa">
+            <div class="menu">
                 <a href="#/user">个人中心</a>
             </div>
-            <div class="aa">
+            <div class="menu">
                 <a href="javascript:">编辑信息</a>
             </div>
-            <div class="aa">
+            <div class="menu">
                 <a href="#/home" @click="outlogin">退出登录</a>
             </div>
         </el-dropdown-menu>
@@ -104,18 +107,18 @@ export default {
         font-size: 19px;
         color: purple;
     }
-    .aa{
-        margin-bottom: 10px;
+    .menu{
+        margin-bottom: 25px;
         font-size: 16px;
         margin-left: 20px;
         margin-right: 20px;
         margin-top: 10px;
     }
-    .aa a{
+    .menu a{
         color: gray;
         text-decoration: none;
     }
-    .aa a:hover{
+    .menu a:hover{
         color: purple;
     }
     .box_in {
@@ -144,5 +147,10 @@ export default {
     }
     .box_top a:hover{
         color: purple;
+    }
+    .zhuye{
+        position: relative;
+        left: 10px;
+        bottom: 10px;
     }
 </style>
