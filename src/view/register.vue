@@ -1,6 +1,47 @@
 <template>
   <div class="register">
-    <div>
+    <div class="register_box">
+    <div class="register_text">
+        <div>用户名:</div>
+        <el-input
+        placeholder="用户名"
+        v-model="username"
+        clearable
+        >
+        </el-input>
+    </div>
+    <div class="register_text">
+        <div>密码:</div>
+        <el-input
+        placeholder="密码"
+        v-model="password"
+        clearable
+        show-password
+        >
+        </el-input>
+    </div>
+    <div class="register_text">
+        <div>确认密码:</div>
+        <el-input
+        placeholder="确认密码"
+        v-model="password2"
+        clearable
+        show-password
+        @blur="pass2"
+        >
+        </el-input>
+    </div>
+    <div class="register_text">
+        <div>手机号:</div>
+        <el-input
+        placeholder="手机号"
+        v-model="mobile"
+        clearable
+        @blur="mobile_tip"
+        >
+        </el-input>
+    </div>
+    <!-- <div>
         <i>用户名：</i>
         <el-input
         placeholder="用户名"
@@ -32,10 +73,10 @@
         @blur="pass2"
         >
         </el-input>
-        <em v-show="error_pass_tip" class="er1">两次密码不一致</em>
+        
     </div>
     <div>
-        <i>请输入手机号：</i>
+        <i>手机号：</i>
         <el-input
         placeholder="手机号"
         v-model="mobile"
@@ -44,11 +85,14 @@
         @blur="mobile_tip"
         >
         </el-input>
-        <em v-show="error_mobile_tip" class="er2">请输入正确的手机号</em>
-    </div>
+        
+    </div> -->
+    <em v-show="error_pass_tip" class="er1">两次密码不一致</em>
+    <em v-show="error_mobile_tip" class="er2">请输入正确的手机号</em>
     <el-button type="success" class="res_bt" @click="register">立即注册</el-button>
     <p v-show="tip" style="font-size: 14px;color: red;">{{ error_tip }}</p>
-    <p>已有账号，前去登录</p>
+    <p class="go_login" @click="go_login">已有账号，前去登录</p>
+    </div>
   </div>
 </template>
 
@@ -128,6 +172,9 @@ export default {
                 this.error_mobile_tip = true
                 return false
             }
+        },
+        go_login() {
+            this.$router.push('/login')
         }
     },
 }
@@ -141,33 +188,43 @@ export default {
         background-image: url('../assets/5.png');
         background-size: 100% 100%;
     }
-    .in_user{
-        margin-top: 100px;
-        width: 300px;
-    }
-    .in_pas{
-        margin-top: 30px;
-        width: 300px;
-    }
-    .in_email{
-        margin-top: 30px;
-        width: 300px;
-    }
     .res_bt{
-        margin-top: 30px;
+        margin-bottom: 10px;
     }
     .er1{
-        position: fixed;
-        left: 970px;
-        top: 340px;
+        position: absolute;
+        left: 950px;
+        top: 370px;
         font-size: 14px;
         color: red;
     }
     .er2{
-        position: fixed;
-        left: 970px;
-        top: 410px;
+        position: absolute;
+        left: 950px;
+        top: 430px;
         font-size: 14px;
         color: red;
+    }
+    .register_box{
+        padding-top: 150px;
+    }
+    .register_text{
+        display: flex;
+        justify-content: flex-start;
+        margin-left: 36%;
+        margin-bottom: 20px;
+    }
+    .register_text div:nth-child(1){
+        text-align: right;
+        padding-top: 10px;
+        width: 100px;
+    }
+    .register_text div:nth-child(2){
+        margin-left: 10px;
+        width: 280px;
+    }
+    .go_login:hover{
+        cursor: pointer;
+        color: purple;
     }
 </style>

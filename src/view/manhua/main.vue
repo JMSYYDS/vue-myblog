@@ -31,6 +31,8 @@
   layout="total,prev,pager,next,jumper"
   :total="arr.length">
   </el-pagination>
+  <br>
+  <br>
 </div>
   
 </template>

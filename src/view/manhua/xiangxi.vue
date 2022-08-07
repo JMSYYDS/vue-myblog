@@ -10,7 +10,7 @@
         direction="ltr"
         size="25%"
         :before-close="handleClose">
-        <div v-for="(i, index) in $store.state.manhua" :key="i.id" class="drawer_list">
+        <div v-for="(i, index) in $store.state.manhua" :key="i.id" class="drawer_list" :title="i.name">
             <a :href="'#/cartoon/detail/'+idx+'/'+i.passage" @click="choos(i.passage, index)">{{ i.name }}</a>
         </div>
       </el-drawer>
@@ -292,6 +292,9 @@ export default {
         text-decoration: none;
         /* color: #b0b0b0; */
         color: black;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
     .drawer_list a:hover{
         background-color: purple;

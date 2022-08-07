@@ -1,5 +1,6 @@
 <template>
   <div class="about">
+    <span class="back" @click="back"><i class="el-icon-arrow-left"></i>返回</span>
       <div class="left">
         <p>最近更新</p>
         <a
@@ -21,7 +22,12 @@
 
 export default {
   components: {
-    }
+    },
+    methods: {
+        back() {
+            this.$router.go(-1)
+        }
+    },
 }
 </script>
 
@@ -32,6 +38,16 @@ export default {
         /* height: 700px; */
         background-color: #F2F6FC;
         position: relative;
+    }
+    .back{
+        position: absolute;
+        left: 20px;
+        top: 10px;
+        font-size: 17px;
+    }
+    .back:hover{
+        color: purple;
+        cursor: pointer;
     }
     .left {
         width: 300px;

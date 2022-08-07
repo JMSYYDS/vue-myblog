@@ -52,11 +52,12 @@ router.beforeEach((to, from, next) => {
     // from 是将要离开的路由
     // next 是一个函数，调用next() 表示放行，允许这次路由导航
 
-    if(to.path === '/user'){
+    if(to.path === '/user' || to.path === '/cartoon/main'){
         const token = localStorage.getItem('token')
         if(token){
             next()
         }else{
+            sessionStorage.setItem("isLogin", false)
             next('/login')
         }   
     }else{
