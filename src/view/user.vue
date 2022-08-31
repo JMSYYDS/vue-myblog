@@ -21,6 +21,18 @@
         </div>
       </el-col>
     </div>
+    <el-tabs type="card" style="width:768px;float:right;">
+      <el-tab-pane label="我的收藏">
+        <div style="max-height:500px">
+          <el-empty description="暂无数据"></el-empty>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="浏览历史">
+        <div style="max-height:500px">
+          <el-empty description="暂无数据"></el-empty>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 

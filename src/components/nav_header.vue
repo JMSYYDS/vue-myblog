@@ -8,13 +8,27 @@
             </a>
         </div>
         <div class="box_right">
-            <a href="#/person">个人简历</a>
-            <a href="#/cartoon">漫画</a>
-            <a href="#/user">个人中心</a>
-            <a href="#/community">社区</a>
-            <a href="#/register" v-if="!$store.state.user">注册</a>
-            <a href="#/login" v-if="$store.state.user">切换账号</a>
-            <a href="#/login" v-else>登录</a>
+            <div :class="select==1?'select':''">
+                <a href="#/person" @click="select=1">个人简历</a>
+            </div>
+            <div :class="select==2?'select':''">
+                <a href="#/cartoon" @click="select=2">漫画</a>
+            </div>
+            <div :class="select==3?'select':''">
+                <a href="#/user" @click="select=3">个人中心</a>
+            </div>
+            <div :class="select==4?'select':''">
+                <a href="#/community" @click="select=4">社区</a>
+            </div>
+            <div v-if="!$store.state.user" :class="select==5?'select':''">
+                <a href="#/register" @click="select=5">注册</a>
+            </div>
+            <div v-if="$store.state.user" :class="select==6?'select':''">
+                <a href="#/login" @click="select=6">切换账号</a>
+            </div>
+            <div v-else :class="select==6?'select':''">
+                <a href="#/login" @click="select=6">登录</a>
+            </div>
         </div>
       </div>
       <el-dropdown class="user_show" v-if="$store.state.user">
@@ -49,7 +63,8 @@ import {LoginOut, GetHeadImg} from '@/api/user'
 export default {
     data() {
         return {
-            imageUrl: ''
+            imageUrl: '',
+            select: 0,
         }
     },
     methods: {
@@ -130,10 +145,23 @@ export default {
         width: 940px;
         height: 90px;
     }
+    .box_right{
+        display: flex;
+        justify-content: space-between;
+        height: 59px;
+        padding-top: 30px;
+    }
+    .box_right div{
+        flex: 1;
+        width: 100px;
+    }
+    .select{
+        border-bottom:4px solid purple;
+    }
     .box_right a {
         text-decoration: none;
         font-size: 20px;
-        margin: 20px;
+        /* margin: 20px; */
         color: gray;
     }
     .box_left a {

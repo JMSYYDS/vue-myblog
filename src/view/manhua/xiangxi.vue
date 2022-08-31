@@ -16,6 +16,8 @@
       </el-drawer>
 
       <div class="manhua_mess"><span style="margin-top: 30px;display:block">{{manhua_mess}}</span></div>
+      <i v-if="love" class="el-icon-star-on love" @click="love=!love" :title="love?'取消收藏':'收藏'"></i>
+      <i class="el-icon-star-off love" @click="love=!love" :title="love?'取消收藏':'收藏'"></i>
       
       <div class="btn">
         <el-button @click="back_car">上一章</el-button>
@@ -41,7 +43,8 @@ export default {
             img_data: [],
             manhua_mess: '',
             count: 30,
-            drawer: false
+            drawer: false,
+            love: false
         }
     },
     async created() {
@@ -269,6 +272,20 @@ export default {
         z-index: 999;
         color: white;
         background-color: black;
+    }
+    .love{
+         position: fixed;
+         top: 32px;
+         right: 100px;
+         font-size: 25px;
+         z-index: 999;
+         cursor: pointer;
+    }
+    .el-icon-star-off{
+        color: white;
+    }
+    .el-icon-star-on{
+        color: orange;
     }
     .imgs{
         margin-left: auto;

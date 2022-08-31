@@ -88,7 +88,8 @@ export default {
 </script>
 <style>
     .box_login input{
-        height: 30px;
+        border-radius: 5px;
+        height: 35px;
         width: 250px;
         margin-top: 15px;
         padding-left: 5px;

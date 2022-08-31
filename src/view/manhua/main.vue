@@ -11,7 +11,7 @@
     <el-button type="text" style="float: left;font-size: 15px" @click="show_all">全部</el-button>
     <el-button type="text" style="float: left;font-size: 15px" @click="lianzai_all">正连载</el-button>
     <el-button type="text" style="float: left;font-size: 15px" @click="finall_all">已完结</el-button>
-    <el-button type="primary" plain class="ser_bt" @click="serach">搜索</el-button>
+    <el-button type="primary" plain class="ser_bt" @click="serach" icon="el-icon-search">搜索</el-button>
     <el-input v-model="ser_data" placeholder="请输入内容" class="ser_in"></el-input>
   </div>
   <div class="box_body">
