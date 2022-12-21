@@ -122,6 +122,7 @@ export default {
                 let register_data = await Register(data)
                 if(register_data.state == 'OK'){
                     localStorage.setItem('token', register_data.username)
+                    localStorage.setItem('mobile', this.mobile)
                     this.$store.commit('setus', true)
                     this.tip = false
                     this.$router.push('/home')

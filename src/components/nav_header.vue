@@ -2,7 +2,7 @@
   <div class="box_top">
       <div class="box_in">
         <div class="box_left">
-            <a href="#/home" style="">
+            <a href="#/home" style="" @click="select=0">
                 <img src="../assets/logo.png" style="width:40px;height: 40px">
                 <span class="zhuye">主页</span>
             </a>

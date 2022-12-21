@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         async login() {
-            if(this.username != '' || this.password != ''){
+            if(this.mobile != '' || this.password != ''){
                 let data = {
                     username: this.mobile,
                     password: this.password,
@@ -41,6 +41,7 @@ export default {
                 let login_data = await Login(data)
                 if(login_data.state == 'OK'){
                     localStorage.setItem('token', login_data.username)
+                    localStorage.setItem('mobile', this.mobile)
                     this.$store.commit('setus', true)
                     this.error_tip = false
                     this.$router.push('/home')

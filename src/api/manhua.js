@@ -33,3 +33,21 @@ export const GetImgs = (data) => {
         data
     })
 }
+
+// 收藏漫画
+export const AddLove = (data) => {
+    return requests({
+        url: '/love_car/',
+        method: 'post',
+        data
+    })
+}
+
+// 获取收藏
+export const GetLove = (data) => {
+    return requests({
+        url: '/get_love/',
+        method: 'post',
+        data
+    })
+}

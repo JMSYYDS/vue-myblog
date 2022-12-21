@@ -16,8 +16,8 @@
       </el-drawer>
 
       <div class="manhua_mess"><span style="margin-top: 30px;display:block">{{manhua_mess}}</span></div>
-      <i v-if="love" class="el-icon-star-on love" @click="love=!love" :title="love?'取消收藏':'收藏'"></i>
-      <i class="el-icon-star-off love" @click="love=!love" :title="love?'取消收藏':'收藏'"></i>
+      <i v-if="love" class="el-icon-star-on love" @click.stop="deslove" :title="love?'取消收藏':'收藏'"></i>
+      <i v-else class="el-icon-star-off love" @click="addlove" :title="love?'取消收藏':'收藏'"></i>
       
       <div class="btn">
         <el-button @click="back_car">上一章</el-button>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {GetImgs, ZhanshiCartoon} from '@/api/manhua'
+import {GetImgs, ZhanshiCartoon, AddLove, GetLove} from '@/api/manhua'
 export default {
     props: ['idx', 'passage'],
     data() {
@@ -48,6 +48,13 @@ export default {
         }
     },
     async created() {
+        let getlove = await GetLove({
+            username: localStorage.getItem('mobile'),
+            cartoonId: this.$route.query.id,
+        })
+        if(getlove.state=='OK'){
+            this.love = getlove.isLove
+        }
         // 检查浏览历史
         if(localStorage.getItem(`passage${this.idx}`)){
             let data = {
@@ -109,8 +116,27 @@ export default {
         handleClose() {
             this.drawer = false
         },
-        titl_show() {
-            console.log(this)
+        async addlove() {
+            this.love = true
+            await AddLove({
+                username: localStorage.getItem('mobile'),
+                cartoonName: this.$route.query.cartoonName,
+                cartoonImg: this.$route.query.cartoonImg,
+                description: this.$route.query.description,
+                cartoonId: this.$route.query.id,
+                isLove: this.love
+            })
+        },
+        async deslove() {
+            this.love = false
+            await AddLove({
+                username: localStorage.getItem('mobile'),
+                cartoonName: this.$route.query.cartoonName,
+                cartoonImg: this.$route.query.cartoonImg,
+                description: this.$route.query.description,
+                cartoonId: this.$route.query.id,
+                isLove: this.love
+            })
         },
         load () {
             // this.count += 2

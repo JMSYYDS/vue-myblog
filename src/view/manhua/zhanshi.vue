@@ -18,10 +18,9 @@
             <a href="javascript:" class="resver" @click="resver">{{ sort }}</a>
             <div class="lis">
                 <a
-                :href="'#/cartoon/detail/'+item.idx+'/'+item.passage"
                 v-for="(item,index) in passage_data"
                 :key="item.id"
-                @click="keep_car(index, item.passage)"
+                @click="keep_car(index, item.passage, item.idx)"
                 target="_blank"
                 >
                 {{ item.name }}
@@ -88,7 +87,7 @@ export default {
             }
             this.$store.commit('setmanhua', this.passage_data)
         },
-        keep_car(index, passage) {
+        keep_car(index, passage, idx) {
             if(this.$store.state.temp === false) {
                 this.ind = index
             }else(
@@ -97,6 +96,15 @@ export default {
             this.$store.commit('setindex', this.ind)
             localStorage.setItem('index', this.ind)
             localStorage.setItem(`passage${this.id}`, passage)
+            this.$router.push({
+                path: '/cartoon/detail/'+idx+'/'+passage,
+                query: {
+                    id: this.id,
+                    cartoonName: this.p_data.title,
+                    cartoonImg: this.img_data,
+                    description: this.p_data.jianjie,
+                }
+            })
         }
     },
 }
@@ -164,6 +172,7 @@ export default {
         justify-content: space-between;
         align-items: flex-start;
         flex-wrap: wrap;
+        cursor: pointer;
     }
     .lis a{
         display: block;

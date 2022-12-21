@@ -16,8 +16,9 @@ module.exports = defineConfig({
         },
     },
     allowedHosts: [
-        'jmsblog.nat123.net', // 允许访问的域名地址，即花生壳内网穿透的地址
-        '49023y65u0.qicp.vip'
+        'jmsblog.nat123.net', // 允许访问的域名地址，即内网穿透的地址
+        '49023y65u0.qicp.vip',
+        'q8f3ro.39nat.com'
     ],
 },
 })

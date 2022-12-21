@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head_img">
-      <el-col :span="12">
+      <!-- <el-col :span="12"> -->
         <div class="demo-basic--circle">
           <div class="block">
             <el-avatar :size="150" :src="imageUrl"></el-avatar>
@@ -19,12 +19,19 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
           </el-upload>
         </div>
-      </el-col>
+      <!-- </el-col> -->
     </div>
-    <el-tabs type="card" style="width:768px;float:right;">
+    <el-tabs type="card" style="width:830px;float:right;margin-top:3%">
       <el-tab-pane label="我的收藏">
-        <div style="max-height:500px">
-          <el-empty description="暂无数据"></el-empty>
+        <div class="love" style="max-height:500px">
+          <!-- <el-empty description="暂无数据"></el-empty> -->
+          <div class="love_item" v-for="item in data_love" :key="item.cartoonId">
+            <a :href="'#/cartoon/book/'+item.cartoonId" target="_blank">
+              <img :src="item.cartoonImg">
+            </a>
+            <a :href="'#/cartoon/book/'+item.cartoonId" class="cartoon_name" target="_blank">{{ item.cartoonName }}</a>
+            <p class="p_text" :title="item.description">{{ item.description }}</p>
+          </div>
         </div>
       </el-tab-pane>
       <el-tab-pane label="浏览历史">
@@ -38,12 +45,14 @@
 
 <script>
 import { UploadHeadImg, GetHeadImg } from '@/api/user'
+import {GetLove} from '@/api/manhua'
 export default {
     data() {
         return {
           imageUrl: '',
           username: '',
-          tip: '更换头像'
+          tip: '更换头像',
+          data_love: []
         }
     },
     methods: {
@@ -62,7 +71,6 @@ export default {
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg' || 'image/png';
         const isLt2M = file.size / 1024 / 1024 < 2;
-
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG和PNG 格式!');
           return
@@ -83,6 +91,11 @@ export default {
       },
     },
     async mounted() {
+      let data_love = await GetLove({
+        username: localStorage.getItem('mobile'),
+        cartoonId: 10010
+      })
+      this.data_love = data_love.data_love
       this.username = localStorage.getItem('token')
       let data = await GetHeadImg({
         username: localStorage.getItem('token')
@@ -128,9 +141,45 @@ export default {
   }
   .head_img{
     margin-top: 50px;
+    float:left;
+    margin-left: 15%;
   }
   .user{
     font-size: 20px;
     margin: 5px;
+  }
+  .love_item{
+    width: 180px;
+    height: 280px;
+    margin: 10px;
+    background-color: #E4E7ED;
+  }
+  .love_item img{
+    width: 180px;
+    height: 220px;
+  }
+  .cartoon_name{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  .cartoon_name:hover{
+    color: red;
+  }
+  .p_text{
+    font-size:12px;
+    padding:2px;
+    height:30px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .love{
+    max-height:500px;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    overflow: scroll;
   }
 </style>
