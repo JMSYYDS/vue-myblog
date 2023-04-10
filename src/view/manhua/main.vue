@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="main_content">
   <div class="block">
     <el-carousel :interval="4000" type="card" height="300px" trigger="click">
         <el-carousel-item v-for="item in 6" :key="item">
@@ -115,6 +115,12 @@ export default {
 </script>
 
 <style scoped>
+    .main_content{
+        width: 100%;
+        height: 100%;
+        background-image: url('../../assets/registerbck.png');
+        background-size: cover;
+    }
   .el-carousel__item h3 {
     color: #475669;
     font-size: 14px;
@@ -134,16 +140,16 @@ export default {
       width: 80%;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 10px;
+      padding-top: 10px;
   }
   .box_body{
       width: 80%;
       min-height: 200px;
       margin-right: auto;
       margin-left: auto;
-      background-color: white;
+      /* background-color: white; */
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       flex-wrap: wrap;
       align-content: flex-start;
   }
@@ -181,7 +187,10 @@ export default {
       width: 180px;
       height: 280px;
       margin: 10px;
-      background-color: #E4E7ED;
+      /* background-color: #E4E7ED; */
+  }
+  .lis:hover{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
   }
   .lis img{
       width: 180px;
@@ -195,7 +204,7 @@ export default {
       margin-bottom: 5px;
   }
   .cartoon_name:hover{
-      color: red;
+      color: #9ad2c9;
   }
 
   .serach{

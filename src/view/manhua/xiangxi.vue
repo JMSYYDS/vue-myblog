@@ -24,7 +24,7 @@
         <el-button @click="next_car">下一章</el-button>
       </div>
       <div class="imgs" v-for="item in img_data" :key="item.id">
-          <img :src="item.img_address">
+          <el-image :src="item.img_address" lazy></el-image>
       </div>
       <div class="btn">
         <el-button @click="back_car">上一章</el-button>
@@ -90,8 +90,11 @@ export default {
         }
         
         // 防止页面刷新时丢失数据
+        let now_time = (new Date(Date.now())).toLocaleString()
         let parms2 = {
-            id: this.idx
+            id: this.idx,
+            readTime: now_time,
+            username: localStorage.getItem('mobile')
         }
         let zhanshi_data = await ZhanshiCartoon(parms2)
         if(sessionStorage.getItem('temp')){
@@ -340,7 +343,7 @@ export default {
         text-overflow: ellipsis;
     }
     .drawer_list a:hover{
-        background-color: purple;
+        background-color: #9ad2c9;
         color: white;
     }
     .drawer_btn{

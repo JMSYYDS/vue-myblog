@@ -51,3 +51,12 @@ export const GetLove = (data) => {
         data
     })
 }
+
+// 获取浏览历史
+export const GetHistory = (data) => {
+    return requests({
+        url: '/get_history/',
+        method: 'post',
+        data
+    })
+}

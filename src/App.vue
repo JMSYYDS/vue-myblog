@@ -1,12 +1,10 @@
 <template>
   <div id="app" class="box" v-cloak>
 
-    <navheader class="nav_header"></navheader>
+    <navheader class="nav_header" v-if="$route.path != '/login' && $route.path != '/register' && $route.path != '/edit'"></navheader>
 
     <!-- 展示组件的占位符 -->
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <router-view></router-view>
     
 
   </div>
@@ -50,7 +48,8 @@ export default {
   margin: 0;
 }
 .box{
-  overflow: visible;
+  min-height: 100%;
+  /* overflow: visible; */
 }
 .nav_header {
   position: sticky;

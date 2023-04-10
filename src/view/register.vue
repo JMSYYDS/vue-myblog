@@ -1,97 +1,49 @@
 <template>
   <div class="register">
+		<div style="margin-top:15%"></div>
     <div class="register_box">
     <div class="register_text">
-        <div>用户名:</div>
-        <el-input
+        <!-- <div>用户名:</div> -->
+        <input
+				type="text"
         placeholder="用户名"
         v-model="username"
-        clearable
-        >
-        </el-input>
+        />
     </div>
     <div class="register_text">
-        <div>密码:</div>
-        <el-input
+        <!-- <div>密码:</div> -->
+        <input
+				type="password"
         placeholder="密码"
         v-model="password"
-        clearable
-        show-password
-        >
-        </el-input>
+        />
     </div>
     <div class="register_text">
-        <div>确认密码:</div>
-        <el-input
+        <!-- <div>确认密码:</div> -->
+        <input
+				type="password"
         placeholder="确认密码"
         v-model="password2"
-        clearable
-        show-password
         @blur="pass2"
-        >
-        </el-input>
+        />
     </div>
     <div class="register_text">
-        <div>手机号:</div>
-        <el-input
+        <!-- <div>手机号:</div> -->
+        <input
         placeholder="手机号"
         v-model="mobile"
-        clearable
         @blur="mobile_tip"
-        >
-        </el-input>
+        />
     </div>
-    <!-- <div>
-        <i>用户名：</i>
-        <el-input
-        placeholder="用户名"
-        v-model="username"
-        clearable
-        class="in_user"
-        >
-        </el-input>
-    </div>
+
+    
     <div>
-        <i>密码：</i>
-        <el-input
-        placeholder="密码"
-        v-model="password"
-        clearable
-        show-password
-        class="in_pas"
-        >
-        </el-input>
+        <el-button type="success" round class="res_bt" @click="register">立即注册</el-button>
     </div>
-    <div>
-         <i>确认密码：</i>
-        <el-input
-        placeholder="确认密码"
-        v-model="password2"
-        clearable
-        show-password
-        class="in_pas"
-        @blur="pass2"
-        >
-        </el-input>
-        
-    </div>
-    <div>
-        <i>手机号：</i>
-        <el-input
-        placeholder="手机号"
-        v-model="mobile"
-        clearable
-        class="in_pas"
-        @blur="mobile_tip"
-        >
-        </el-input>
-        
-    </div> -->
-    <em v-show="error_pass_tip" class="er1">两次密码不一致</em>
-    <em v-show="error_mobile_tip" class="er2">请输入正确的手机号</em>
-    <el-button type="success" class="res_bt" @click="register">立即注册</el-button>
     <p v-show="tip" style="font-size: 14px;color: red;">{{ error_tip }}</p>
     <p class="go_login" @click="go_login">已有账号，前去登录</p>
+		<em v-show="error_pass_tip" class="er1">两次密码不一致</em>
+    <em v-show="error_mobile_tip" class="er2">请输入正确的手机号</em>
     </div>
   </div>
 </template>
@@ -148,7 +100,7 @@ export default {
             }
             else{
                 this.error_tip = '请输入正确信息'
-                this.tip = true
+								this.$message.warning('请输入正确信息')
             }
         },
         pass2 () {
@@ -185,47 +137,65 @@ export default {
     .register{
         margin-left: auto;
         margin-right: auto;
-        height: 800px;
-        background-image: url('../assets/5.png');
-        background-size: 100% 100%;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-image: url('../assets/aaa.png');
+        background-size: cover;
     }
     .res_bt{
-        margin-bottom: 10px;
+        margin-top: 15px;
+        width: 250px;
+        background: linear-gradient(90deg, #85e9e2 3%, #e79bee 97%);
+        box-shadow: 0px 2px 10px 0px rgba(0, 172, 153, 0.4);
+        border: none;
+        cursor: pointer;
     }
     .er1{
-        position: absolute;
-        left: 950px;
-        top: 370px;
+        position: relative;
+        left: 270px;
+        top: -210px;
         font-size: 14px;
         color: red;
+        display: inline-block;
     }
     .er2{
-        position: absolute;
-        left: 950px;
-        top: 430px;
+        position: relative;
+        left: 270px;
+        top: -155px;
         font-size: 14px;
         color: red;
+        display: block;
     }
     .register_box{
-        padding-top: 150px;
+        width: 380px;
+        margin: auto;
     }
     .register_text{
-        display: flex;
-        justify-content: flex-start;
-        margin-left: 36%;
         margin-bottom: 20px;
     }
-    .register_text div:nth-child(1){
-        text-align: right;
-        padding-top: 10px;
-        width: 100px;
+		.register_text input{
+			border: 1px solid white;
+      border-radius: 25px;
+			height: 45px;
+			width: 250px;
+			margin-top: 5px;
+			padding-left: 10px;
+			border-radius: 20px;
+			box-sizing: border-box;
+			cursor: pointer;
+			outline: none;
+			background-color: transparent;
+		}
+		.register_text input:focus{
+        border: 1px solid rgb(229, 148, 211);
     }
-    .register_text div:nth-child(2){
-        margin-left: 10px;
-        width: 280px;
-    }
+		.go_login{
+			margin-top: 15px;
+			font-size: 14px;
+		}
     .go_login:hover{
         cursor: pointer;
-        color: purple;
+        color: white;
     }
 </style>

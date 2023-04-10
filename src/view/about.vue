@@ -1,92 +1,77 @@
 <template>
-  <div class="about">
-    <span class="back" @click="back"><i class="el-icon-arrow-left"></i>返回</span>
-      <div class="left">
-        <p>最近更新</p>
-        <a
-        v-for="item in $store.state.page_title"
-        :key="item.id"
-        :href="'#/community/content/'+item.id"
-        >
-        {{ item.title }}
-        </a>
+  <div class="about_content">
+    <div class="container">
+      <!-- <div class="card_container">
+        <EssayIndex :essay_data="essay_data" v-for="item in 10" :key="item"></EssayIndex>
+      </div> -->
+      
+      <router-view></router-view>
+      <div class="edit_icon" @click="go_edit">
+        <el-tooltip effect="dark" content="写作" placement="top">
+          <img src="@/assets/edit_icon.png">
+        </el-tooltip>
       </div>
-      <div class="center">
-        <router-view></router-view>
-      </div>
-      <div class="right">right</div>
+    </div>
   </div>
 </template>
 
 <script>
+import EssayIndex from '@/view/community/essayCard.vue'
 
 export default {
   components: {
+    EssayIndex
+    },
+    data() {
+      return {
+        
+      }
     },
     methods: {
-        back() {
-            this.$router.go(-1)
+        go_edit() {
+					let Router_Url = this.$router.resolve({
+						path: '/edit'
+					})
+					window.open(Router_Url.href, '_blank')
         }
+    },
+    async mounted() {
+      
     },
 }
 </script>
 
 <style scoped>
-    .about {
-        display: flex;
-        justify-content: space-around;
-        /* height: 700px; */
-        background-color: #F2F6FC;
-        position: relative;
+    .about_content{
+      position: absolute;
+      width: 100%;
+      min-height: calc(100% - 70px);
+      background-color: rgb(245, 245, 245);
+      /* background-image: url('../assets/loginbck.jpg'); */
+      /* background-size: cover; */
     }
-    .back{
-        position: absolute;
-        left: 20px;
-        top: 10px;
-        font-size: 17px;
+    .container{
+      width: 1200px;
+      margin: 30px auto 30px auto;
     }
-    .back:hover{
-        color: purple;
-        cursor: pointer;
+    .card_container{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
-    .left {
-        width: 300px;
-        height: 300px;
-        background-color: #FFFFFF;
-        margin-top: 100px;
-        margin-bottom: 50px;
-        position: sticky;
-        top: 100px;
-    }
-    .left a{
-        display: block;
-        width: 80%;
-        margin: 15px;
-        text-decoration: none;
-        color: black;
-    }
-    .left a:hover{
-        color: rgba(86, 91, 235, 0.847);
-    }
-    .left p{
-        margin-top: 20px;
-    }
-    .center {
-        width: 800px;
-        background-color: #EBEEF5;
-        margin-top: 100px;
-        margin-bottom: 50px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-    }
-    .right {
-        width: 300px;
-        height: 300px;
-        background-color: #FFFFFF;
-        margin-top: 100px;
-        margin-bottom: 50px;
-        position: sticky;
-        top: 100px;
-    }
+		.edit_icon{
+			position: fixed;
+			width: 60px;
+			height: 60px;
+			right: 130px;
+			bottom: 130px;
+			cursor: pointer;
+		}
+		.edit_icon img{
+			transform: scale(0.3);
+		}
+		.edit_icon img:hover{
+			transform: scale(0.4);
+			transition: 0.5s;
+		}
 </style>

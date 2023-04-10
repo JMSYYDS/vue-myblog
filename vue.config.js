@@ -5,8 +5,12 @@ module.exports = defineConfig({
   devServer: {
     port: 8008,
     // disableHostCheck: true,
+    // client: {
+    //     webSocketURL: 'wss://490k23650j.zicp.fun',
+    // },
     proxy:{
         '/api':{
+            // wss: true,
             target:'http://192.168.44.1:8000/',//跨域请求的公共地址
             // target:'http://127.0.0.1:8008/',
             changeOrigin:true, //是否开启跨域，值为 true 就是开启， false 不开启
@@ -18,7 +22,9 @@ module.exports = defineConfig({
     allowedHosts: [
         'jmsblog.nat123.net', // 允许访问的域名地址，即内网穿透的地址
         '49023y65u0.qicp.vip',
-        'q8f3ro.39nat.com'
+        'q8f3ro.39nat.com',
+        '490k23650j.zicp.fun',
+        'manyan.w1.luyouxia.net'
     ],
 },
 })

@@ -35,8 +35,11 @@ import {ZhanshiCartoon} from '@/api/manhua'
 export default {
     props: ['id'],
     async created() {
+        let now_time = (new Date(Date.now())).toLocaleString()
         let data = {
-            id: this.id
+            id: this.id,
+            readTime: now_time,
+            username: localStorage.getItem('mobile')
         }
         let zhanshi_data = await ZhanshiCartoon(data)
         if(zhanshi_data.state == 'OK'){
@@ -186,6 +189,6 @@ export default {
     }
     .lis a:hover{
         color: white;
-        background-color: purple;
+        background-color: #9ad2c9;
     }
 </style>

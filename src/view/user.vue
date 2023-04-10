@@ -1,5 +1,6 @@
 <template>
-  <div>
+<div class="user_box" v-cloak>
+  <div class="user_content">
     <div class="head_img">
       <!-- <el-col :span="12"> -->
         <div class="demo-basic--circle">
@@ -21,38 +22,91 @@
         </div>
       <!-- </el-col> -->
     </div>
-    <el-tabs type="card" style="width:830px;float:right;margin-top:3%">
-      <el-tab-pane label="我的收藏">
-        <div class="love" style="max-height:500px">
-          <!-- <el-empty description="暂无数据"></el-empty> -->
-          <div class="love_item" v-for="item in data_love" :key="item.cartoonId">
-            <a :href="'#/cartoon/book/'+item.cartoonId" target="_blank">
-              <img :src="item.cartoonImg">
-            </a>
-            <a :href="'#/cartoon/book/'+item.cartoonId" class="cartoon_name" target="_blank">{{ item.cartoonName }}</a>
-            <p class="p_text" :title="item.description">{{ item.description }}</p>
+    <div>
+      <el-tabs type="card" style="width:830px;float:right;margin-top:3%">
+        <el-tab-pane label="我的收藏">
+          <div class="love" style="max-height:800px" v-if="data_love[0]">
+            <!-- <el-empty description="暂无数据"></el-empty> -->
+            <div class="love_item" v-for="item in data_love" :key="item.cartoonId">
+              <a :href="'#/cartoon/book/'+item.cartoonId" target="_blank">
+                <img :src="item.cartoonImg">
+              </a>
+              <a :href="'#/cartoon/book/'+item.cartoonId" class="cartoon_name" target="_blank">{{ item.cartoonName }}</a>
+              <p class="p_text" :title="item.description">{{ item.description }}</p>
+            </div>
           </div>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="浏览历史">
-        <div style="max-height:500px">
-          <el-empty description="暂无数据"></el-empty>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+          <div v-else>
+            <el-empty description="暂无数据"></el-empty>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="浏览历史">
+          <div style="max-height:700px;overflow: scroll;" v-if="data_history[0]">
+            <div class="history_card" v-for="item in data_history" :key="item.cartoonId">
+              <div class="card_img">
+                <a :href="'#/cartoon/book/'+item.cartoonId" target="_blank">
+                  <img :src="item.cartoonImg">
+                </a>
+              </div>
+              <div class="card_content">
+                <div>
+                  <a :href="'#/cartoon/book/'+item.cartoonId" target="_blank" style="text-decoration: none;color: black;">
+                    <div class="content_name">{{ item.cartoonName }}</div>
+                  </a>
+                  <div style="margin-top:20px;text-align:left;font-size:12px;padding:2px" :title="item.description">{{ item.description }}</div>
+                </div>
+                <div>
+                  <div style="float:left;width:300px;text-align:left;color:gray">{{item.readTime}}</div>
+                  <div class="content_icon">
+                    <img style="width:100%;height:100%;border-radius: 100%;" :src="imageUrl" />
+                  </div>
+                  <span style="float:left;margin-left:10px">{{username}}</span>
+                  <div style="height:20px"></div>
+                  <el-divider></el-divider>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <el-empty description="暂无数据"></el-empty>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="我的文章">
+          <div v-if="data_essay[0]" style="max-height:800px;padding:0 10px 20px 10px">
+            <div v-for="item in data_essay" :key="item.essayId" class="essay_item">
+              <essay-card :essay="item" :isUser="true"></essay-card>
+              <div>
+                <el-button type="danger" icon="el-icon-delete" circle @click="delete_essay(item.essayId)"></el-button>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <el-empty description="暂无数据"></el-empty>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
+</div>
 </template>
 
 <script>
 import { UploadHeadImg, GetHeadImg } from '@/api/user'
-import {GetLove} from '@/api/manhua'
+import {GetLove, GetHistory} from '@/api/manhua'
+import {GetUserEssay, DeleteEssay} from '@/api/community'
+import EssayCard from '@/view/community/essayCard.vue'
+
 export default {
+  components: {
+    EssayCard
+  },
     data() {
         return {
           imageUrl: '',
           username: '',
           tip: '更换头像',
-          data_love: []
+          data_love: [],
+          data_history: [],
+          data_essay: []
         }
     },
     methods: {
@@ -89,6 +143,43 @@ export default {
           }
         }
       },
+      order(a,b){
+        if(a.readTime > b.readTime){
+            return -1;
+        }else if(a.readTime < b.readTime){
+            return 1;
+        }else if(a.readTime == b.readTime){
+            return 0;
+        }
+      },
+      async delete_essay(essayId) {
+        this.$confirm('确定删除此文章吗', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          let res_data = await DeleteEssay({
+            essayId
+          })
+          if(res_data.state == "OK"){
+            let user_essay = await GetUserEssay({
+              essayAuthor: localStorage.getItem('token')
+            })
+            this.data_essay = user_essay.data
+            this.$message({
+              type: 'success',
+              message: '删除成功!',
+              showClose: true
+            });
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除',
+            showClose: true
+          });          
+        });
+      }
     },
     async mounted() {
       let data_love = await GetLove({
@@ -107,11 +198,32 @@ export default {
         this.tip = '上传头像'
         this.imageUrl = 'https://img2.baidu.com/it/u=3035872156,255770104&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500'
       }
+      let data_history = await GetHistory({
+        username: localStorage.getItem('mobile'),
+      })
+      this.data_history = data_history.data_history.sort(this.order)
+      let user_essay = await GetUserEssay({
+        essayAuthor: localStorage.getItem('token')
+      })
+      this.data_essay = user_essay.data
     },
 }
 </script>
 
 <style scoped>
+  .user_box{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url('../assets/loginbck.jpg');
+    background-size: cover;
+  }
+  .user_content{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+  }
     /* div {
         display: flex;
         justify-content: center;
@@ -141,8 +253,8 @@ export default {
   }
   .head_img{
     margin-top: 50px;
-    float:left;
-    margin-left: 15%;
+    /* float:left; */
+    /* margin-left: 15%; */
   }
   .user{
     font-size: 20px;
@@ -152,7 +264,10 @@ export default {
     width: 180px;
     height: 280px;
     margin: 10px;
-    background-color: #E4E7ED;
+    /* background-color: #E4E7ED; */
+  }
+  .love_item:hover{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
   }
   .love_item img{
     width: 180px;
@@ -182,4 +297,61 @@ export default {
     flex-wrap: wrap;
     overflow: scroll;
   }
+  .history_card{
+    margin: 10px;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .history_card:hover{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+  }
+  .card_img{
+    cursor: pointer;
+  }
+  .history_card img{
+    width: 180px;
+    height: 220px;
+  }
+  .card_content{
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .content_name{
+    text-align:left;
+    font-size:22px;
+    font-weight:700;
+    margin-top:10px;
+    cursor: pointer;
+  }
+  .content_name:hover{
+    color: blueviolet;
+  }
+  .content_icon{
+    display: block;
+    width: 20px;
+    height: 20px;
+    float: left;
+    border-radius: 100%;
+    background-size: 100% 100%;
+    cursor: pointer;
+  }
+  ::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
+  .essay_item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+
+<style lang="less">
+.user_content{
+  .el-divider--horizontal{
+    margin: 0px 0px;
+    margin-top: 10px;
+  }
+}
 </style>

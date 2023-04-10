@@ -7,8 +7,9 @@ import myself from '../view/myself.vue'
 import user from '../view/user.vue'
 // 社区
 import about from '../view/about.vue'
-import title from '../view/community/title.vue'
 import content from '../view/community/content.vue'
+import edit from '../view/community/edit.vue'
+import essaymain from '../view/community/main.vue'
 // 漫画
 import register from '../view/register.vue'
 import cartoon from '../view/cartoon.vue'
@@ -30,10 +31,11 @@ const router = new VueRouter({
         {path: '/person', component: myself},
         {path: '/user', component: user},
         {path: '/community', component: about, children: [
-            {path: '', redirect: 'title'},
-            {path: 'title', component: title},
-            {path: 'content/:id', component: content, props: true}
+            {path: '', redirect: 'essaymain'},
+            {path: 'essaymain', component: essaymain},
+            {path: 'content/:id', component: content, props: true},
         ]},
+        {path: '/edit', component: edit},
         {path: '/register', component: register},
         {path: '/cartoon', component: cartoon, children: [
             // 子路由
@@ -52,14 +54,23 @@ router.beforeEach((to, from, next) => {
     // from 是将要离开的路由
     // next 是一个函数，调用next() 表示放行，允许这次路由导航
 
-    if(to.path === '/user' || to.path === '/cartoon/main'){
+    // const token = localStorage.getItem('token')
+		// console.log(token)
+		// if(token){
+		// 		next()
+		// }else{
+		// 		sessionStorage.setItem("isLogin", false)
+		// 		next('/login')
+		// }
+
+    if(to.path != "/login" && to.path != "/register"){
         const token = localStorage.getItem('token')
         if(token){
             next()
         }else{
             sessionStorage.setItem("isLogin", false)
             next('/login')
-        }   
+        }
     }else{
         next()
     }

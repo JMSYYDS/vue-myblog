@@ -1,18 +1,19 @@
 <template>
-  <div @mousewheel="Wheel">
-    <el-carousel height="87.5vh" direction="vertical" :autoplay="false" ref="change" indicator-position="none">
-      <el-carousel-item>
+  <div @mousewheel="Wheel" style="height:100%">
+    <!-- <el-carousel height="1000px" direction="vertical" :autoplay="false" ref="change" indicator-position="none">
+      <el-carousel-item> -->
         <div class="bck_img">
-          <h1 class="come">欢迎来到季明深的个人主页</h1>
+          <h1 class="come">欢迎来到漫研社</h1>
           <h1 class="come">开启旅行吧</h1>
           <p class="bt">这里可以看免费漫画,还可以发表文章一起讨论</p>
+          <!-- <el-button type="success" plain round size="medium" @click="set_cartoon">开始下载！！！！</el-button> -->
           <el-button type="success" plain round size="medium" @click="login">{{ tip }}</el-button>
         </div>
-      </el-carousel-item>
+      <!-- </el-carousel-item>
       <el-carousel-item>
         <MySelf></MySelf>
       </el-carousel-item>
-    </el-carousel>
+    </el-carousel> -->
     <!-- <div class="bck_img">
       <h1 class="come">欢迎来到季明深的个人主页</h1>
       <h1 class="come">开启旅行吧</h1>
@@ -25,6 +26,7 @@
 <script>
 import 'animate.css'
 import MySelf from './myself.vue'
+import {setCartoon} from '@/api/user'
 
 export default {
   components: {
@@ -37,6 +39,10 @@ export default {
     }
   },
   methods: {
+    async set_cartoon() {
+      let data = await setCartoon()
+      console.log("ssss",data)
+    },
     login () {
       this.$router.push('/login')
     },
@@ -72,9 +78,10 @@ export default {
 <style>
 .bck_img {
   width: 100%;
-  height: 800px;
-  background-image: url("../assets/2.jpg");
-  background-size: 100% 100%;
+  height: 100%;
+  position: absolute;
+  background-image: url("../assets/aaa.png");
+  background-size: cover;
 }
 .bck_img h1 {
   color: orange;
@@ -82,7 +89,7 @@ export default {
   font-size: 50px;
 }
 .bck_img h1:nth-child(1) {
-  padding-top: 120px;
+  padding-top: 220px;
 }
 .bck_img p {
   color: white;

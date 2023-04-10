@@ -22,7 +22,7 @@ export const Register = (data) => {
 export const LoginOut = () => {
     return requests({
         url: '/login_out/',
-        method: 'get',
+        method: 'get'
     })
 }
 
@@ -41,5 +41,12 @@ export const GetHeadImg = (data) => {
         url: '/get_img/',
         method: 'post',
         data
+    })
+}
+
+export const setCartoon = () => {
+    return requests({
+        url: '/set_cartoon/',
+        method: 'get',
     })
 }

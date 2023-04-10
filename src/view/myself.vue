@@ -18,7 +18,8 @@ export default {
 <style scoped>
   .box1 {
       width: 100%;
-      height: 800px;
+      height: 100%;
+      position: absolute;
       background-image: url('../assets/9.jpg');
       background-size: 100% 100%;
       display: flex;
