@@ -83,7 +83,7 @@ export default {
             this.$message({
                 showClose: true,
                 message: '请先登录',
-                type: 'error'
+                type: 'warning'
             });
         }
         sessionStorage.setItem("isLogin", true)
