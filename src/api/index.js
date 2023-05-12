@@ -10,7 +10,7 @@ const requests = axios.create({
     // 配置对象
     baseURL: "/api",
     // 请求超时的时间
-    timeout: 5000,
+    timeout: 10000,
 })
 
 requests.interceptors.request.use((config) => {

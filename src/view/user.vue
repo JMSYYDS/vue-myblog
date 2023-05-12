@@ -46,7 +46,7 @@
             <!-- <el-empty description="暂无数据"></el-empty> -->
             <div class="love_item" v-for="item in data_love" :key="item.cartoonId">
               <a :href="'#/cartoon/book/'+item.cartoonId" target="_blank">
-                <img :src="item.cartoonImg">
+                <img :src="api + item.cartoonImg">
               </a>
               <a :href="'#/cartoon/book/'+item.cartoonId" class="cartoon_name" target="_blank">{{ item.cartoonName }}</a>
               <p class="p_text" :title="item.description">{{ item.description }}</p>
@@ -61,7 +61,7 @@
             <div class="history_card" v-for="item in data_history" :key="item.cartoonId">
               <div class="card_img">
                 <a :href="'#/cartoon/book/'+item.cartoonId" target="_blank">
-                  <img :src="item.cartoonImg">
+                  <img :src="api + item.cartoonImg">
                 </a>
               </div>
               <div class="card_content">
@@ -128,7 +128,8 @@ export default {
           input: '',
           input2: '',
           update_password_tip: '验证身份',
-          input_tip: '输入当前用户手机号'
+          input_tip: '输入当前用户手机号',
+          api: 'http://manyan.w1.luyouxia.net/'
         }
     },
     methods: {
