@@ -60,3 +60,11 @@ export const GetHistory = (data) => {
         data
     })
 }
+
+// 获取本地所有漫画信息
+export const AllLocalCartoon = () => {
+    return requests({
+        url: '/local_get_cartoon/',
+        method: 'get'
+    })
+}

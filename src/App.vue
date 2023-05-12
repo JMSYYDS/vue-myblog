@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="box" v-cloak>
 
-    <navheader class="nav_header" v-if="$route.path != '/login' && $route.path != '/register' && $route.path != '/edit'"></navheader>
+    <navheader class="nav_header" v-if="$route.path != '/login' && $route.path != '/register' && $route.path != '/edit' && $route.path != '/manageAdmin'"></navheader>
 
     <!-- 展示组件的占位符 -->
     <router-view></router-view>

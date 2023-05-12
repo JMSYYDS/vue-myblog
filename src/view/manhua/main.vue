@@ -104,7 +104,7 @@ export default {
             this.arr = this.wanjie_arr
         }
     },
-    async created() {
+    async mounted() {
         if(sessionStorage.getItem('currentPage')){
             this.currentPage = parseInt(sessionStorage.getItem('currentPage'))
         }

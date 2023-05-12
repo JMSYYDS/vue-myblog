@@ -16,6 +16,8 @@ import cartoon from '../view/cartoon.vue'
 import main from '../view/manhua/main.vue'
 import book from '../view/manhua/zhanshi.vue'
 import details from '../view/manhua/xiangxi.vue'
+// 后台管理页面
+import manageAdmin from '../view/manageAdmin/index.vue'
 
 // VueRouter 安装为 Vue 的插件
 Vue.use(VueRouter)
@@ -44,6 +46,7 @@ const router = new VueRouter({
             {path: 'book/:id', component: book, props: true},
             {path: 'detail/:idx/:passage', component: details, props: true}
         ]},
+        {path: '/manageAdmin', component: manageAdmin},
     ]
 })
 

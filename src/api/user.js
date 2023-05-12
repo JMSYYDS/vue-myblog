@@ -44,9 +44,19 @@ export const GetHeadImg = (data) => {
     })
 }
 
+// 爬取漫画下载
 export const setCartoon = () => {
     return requests({
         url: '/set_cartoon/',
         method: 'get',
+    })
+}
+
+// 修改密码
+export const UpdatePassword = (data) => {
+    return requests({
+        url: '/update_password/',
+        method: 'post',
+        data
     })
 }

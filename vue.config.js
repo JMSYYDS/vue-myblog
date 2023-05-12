@@ -24,7 +24,8 @@ module.exports = defineConfig({
         '49023y65u0.qicp.vip',
         'q8f3ro.39nat.com',
         '490k23650j.zicp.fun',
-        'manyan.w1.luyouxia.net'
+        'manyan.w1.luyouxia.net',
+        '42956ff5.r2.vip.cpolar.cn'
     ],
 },
 })

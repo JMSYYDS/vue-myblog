@@ -4,10 +4,14 @@
       <el-carousel-item> -->
         <div class="bck_img">
           <h1 class="come">欢迎来到漫研社</h1>
-          <h1 class="come">开启旅行吧</h1>
-          <p class="bt">这里可以看免费漫画,还可以发表文章一起讨论</p>
+          <!-- <h1 class="come">开启旅行吧</h1> -->
+          <!-- <p class="bt">这里可以看免费漫画,还可以发表文章一起讨论</p> -->
           <!-- <el-button type="success" plain round size="medium" @click="set_cartoon">开始下载！！！！</el-button> -->
-          <el-button type="success" plain round size="medium" @click="login">{{ tip }}</el-button>
+          <!-- <el-button type="success" plain round size="medium" @click="login">{{ tip }}</el-button> -->
+          <div style="margin-top:30px">
+            <el-button type="primary" plain round style="margin:30px" @click="go_read('看漫画')">看漫画</el-button>
+            <el-button type="primary" plain round style="margin:30px" @click="go_read('读文章')">读文章</el-button>
+          </div>
         </div>
       <!-- </el-carousel-item>
       <el-carousel-item>
@@ -39,6 +43,14 @@ export default {
     }
   },
   methods: {
+    go_read(val) {
+      if(val == '看漫画'){
+        this.$router.push('/cartoon')
+      }
+      else if(val == '读文章'){
+        this.$router.push('/community')
+      }
+    },
     async set_cartoon() {
       let data = await setCartoon()
       console.log("ssss",data)

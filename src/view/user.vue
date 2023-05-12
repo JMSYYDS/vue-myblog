@@ -19,6 +19,23 @@
             <!-- <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
           </el-upload>
+          <div style="height:20px"></div>
+          <el-button type="primary" @click="dialogVisible = true">修改密码</el-button>
+          <div style="height:20px"></div>
+          <el-button v-if="isAdmin" type="primary" @click="goAdmin">后台管理页面</el-button>
+          <el-dialog
+            :title="update_password_tip"
+            :visible.sync="dialogVisible"
+            width="20%"
+            >
+            <el-input v-model="input" :placeholder="input_tip"></el-input>
+            <div style="height:20px"></div>
+            <el-input v-if="update_password_tip=='修改密码'" v-model="input2" placeholder="确认密码"></el-input>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handle_sel">确 定</el-button>
+            </span>
+          </el-dialog>
         </div>
       <!-- </el-col> -->
     </div>
@@ -90,7 +107,7 @@
 </template>
 
 <script>
-import { UploadHeadImg, GetHeadImg } from '@/api/user'
+import { UploadHeadImg, GetHeadImg, UpdatePassword } from '@/api/user'
 import {GetLove, GetHistory} from '@/api/manhua'
 import {GetUserEssay, DeleteEssay} from '@/api/community'
 import EssayCard from '@/view/community/essayCard.vue'
@@ -106,10 +123,43 @@ export default {
           tip: '更换头像',
           data_love: [],
           data_history: [],
-          data_essay: []
+          data_essay: [],
+          dialogVisible: false,
+          input: '',
+          input2: '',
+          update_password_tip: '验证身份',
+          input_tip: '输入当前用户手机号'
         }
     },
     methods: {
+      goAdmin() {
+        let Router_Url = this.$router.resolve({
+          path: '/manageAdmin'
+        })
+        window.open(Router_Url.href, '_blank')
+      },
+      async handle_sel() {
+        if(this.update_password_tip == '验证身份'){
+          if(this.input == localStorage.getItem('mobile')){
+            this.input = ''
+            this.update_password_tip = '修改密码'
+            this.input_tip = '输入新密码'
+          }else{
+            this.$message.warning('手机号错误')
+          }
+        }else{
+          if(this.input != this.input2){
+            this.$message.warning('两次密码不一致')
+          }else{
+            await UpdatePassword({
+              username: localStorage.getItem('token'),
+              password: this.input
+            })
+            this.$message.success('修改成功')
+            this.dialogVisible = false
+          }
+        }
+      },
       async uploadimg(base64_data) {
         let username = localStorage.getItem('token')
         let data = await UploadHeadImg({
@@ -207,6 +257,15 @@ export default {
       })
       this.data_essay = user_essay.data
     },
+    computed: {
+      isAdmin() {
+        if(localStorage.getItem('mobile') == '18944155125'){
+          return true
+        }else{
+          return false
+        }
+      }
+    }
 }
 </script>
 
